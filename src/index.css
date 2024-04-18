@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background: rgb(71,126,200);
+  background: linear-gradient(180deg, rgba(71,126,200,1) 0%, rgba(118,172,234,1) 25%);
+  color: white;
+  font-family: Tajawal, sans-serif;
+  box-sizing: border-box;
+}

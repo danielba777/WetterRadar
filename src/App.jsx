@@ -5,38 +5,41 @@ import { useEffect, useState } from "react"
 
 function App() {
 
-  const [geoData, setGeoData] = useState(null)
+  const day00 = dayjs()
+  const day01 = day00.add(1, 'day')
+  const day02 = day00.add(2, 'day')
+  const day03 = day00.add(3, 'day')
+  const day04 = day00.add(4, 'day')
+  const day05 = day00.add(5, 'day')
+
+  const days = [day00,day01,day02,day03,day04,day05]
+  const weekDays = ['So','Mo','Di','Mi','Do','Fr','Sa']
+
+  const [selDate,setSelDate] = useState(day00)
+  const [geoData, setGeoData] = useState({'city': 'Berlin','lat': 52.520008,'lon': 13.404954})
   const [weatherData, setWeatherData] = useState(null)
 
-  async function fetchWeatherData(){
+  function extractData(day){
 
-    console.log("fetchWeatherData() START")
-    console.log(geoData)
+    const selDay = day.format("YYYY-MM-DD")
 
-    const lat = geoData.lat
-    const lon = geoData.lon
+    const timeData = weatherData?.hourly.time.filter(hour => hour.startsWith(selDay))
+    const timeDayData = weatherData?.daily.time.filter(hour => hour.startsWith(selDay))
 
-    console.log(lat)
-    console.log(lon)
+    if(timeData.length > 0){
 
-    const url = `https://api.openweathermap.org/data/2.5/weather?${lat}={lat}&${lon}={lon}&appid=64b3fbab07e17133eb798ebbf4e98ce4`
-
-    try{
-
-      const res = await fetch(url)
-      const data = await res.json()
-
-      setWeatherData(data)
+      const startIndex = weatherData?.hourly.time.indexOf(timeData[0])
+      const endIndex = weatherData?.hourly.time.indexOf(timeData[timeData.length - 1])
       
-      console.log('WEATHER DATA: ')
-      console.log(data)
-        
-    }catch(err){
+      const startDayIndex = weatherData?.daily.time.indexOf(timeDayData[0])
+      const endDayIndex = weatherData?.daily.time.indexOf(timeDayData[timeDayData.length - 1])
 
-      console.log("Weather API Error: " + err.message)
+      return { startIndex, endIndex, startDayIndex, endDayIndex }
+    }else{
+      return { startIndex: -1, endIndex: -1, startDayIndex: -1, endDayIndex: -1 }
     }
   }
-    
+
   async function fetchGeoData(str){
 
     const urlStart = 'https://api.geoapify.com/v1/geocode/search?text='
@@ -59,19 +62,42 @@ function App() {
     }
   }
 
+  async function fetchWeatherData(){
+
+    const lat = geoData.lat
+    const lon = geoData.lon
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=auto&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean,sunrise,sunset,sunshine_duration&hourly=precipitation_probability,precipitation,wind_speed_10m,wind_direction_10m,temperature_2m,apparent_temperature,relative_humidity_2m,surface_pressure&current=temperature_2m`
+
+    try{
+
+      const res = await fetch(url)
+      const data = await res.json()
+
+      setWeatherData(data)
+
+      console.log(data)
+
+      console.log(data.daily.sunshine_duration[extractData(selDate).startDayIndex])
+        
+    }catch(err){
+
+      console.log("Weather API Error: " + err.message)
+    }
+  }
+
   useEffect(() =>{
     if(geoData !== null){
       fetchWeatherData()
     }
-  }, [geoData])
+  }, [geoData,selDate])
 
   return (
     <>    
-      <Header fetchGeoData={fetchGeoData} geoData={geoData}></Header>
-      <Body></Body>
+      <Header fetchGeoData={fetchGeoData} geoData={geoData} weatherData={weatherData}></Header>
+      <Body geoData={geoData} weatherData={weatherData} days={days} weekDays={weekDays} selDate={selDate} setSelDate={setSelDate} extractData={extractData}></Body>
       <Footer></Footer>
     </>
-
   )
 }
 

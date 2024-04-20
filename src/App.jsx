@@ -2,6 +2,7 @@ import Header from "./components/Header"
 import Body from "./components/Body"
 import Footer from "./components/Footer"
 import { useEffect, useState } from "react"
+import { WEATHERDESCR } from './data/descriptions'
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
   const [selDate,setSelDate] = useState(day00)
   const [geoData, setGeoData] = useState({'city': 'Berlin','lat': 52.520008,'lon': 13.404954})
   const [weatherData, setWeatherData] = useState(null)
+
+  const nextDay = selDate.add(1, 'day')
 
   function extractData(day){
 
@@ -38,6 +41,32 @@ function App() {
     }else{
       return { startIndex: -1, endIndex: -1, startDayIndex: -1, endDayIndex: -1 }
     }
+  }
+
+  function getWeatherCode(startHour, endHour, isOverNight){
+    
+    const startIndex = extractData(selDate).startIndex
+
+    const endIndex = isOverNight ? extractData(nextDay).endIndex : extractData(selDate).endIndex 
+
+    const weatherDayData = weatherData?.hourly.weather_code.slice(startIndex,endIndex).slice(startHour,endHour)
+
+    const codeCount = {}
+    weatherDayData.forEach(code => {
+      codeCount[code] = (codeCount[code] || 0) + 1;
+    })
+    
+    let mostCommonCode;
+    let maxCount = 0;
+
+    for(const code in codeCount){
+      if(codeCount[code] > maxCount){
+        maxCount = codeCount[code]
+        mostCommonCode = code;
+      }
+    }
+    
+    return mostCommonCode
   }
 
   async function fetchGeoData(str){
@@ -67,7 +96,7 @@ function App() {
     const lat = geoData.lat
     const lon = geoData.lon
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=auto&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean,sunrise,sunset,sunshine_duration&hourly=precipitation_probability,precipitation,wind_speed_10m,wind_direction_10m,temperature_2m,apparent_temperature,relative_humidity_2m,surface_pressure&current=temperature_2m`
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=auto&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean,sunrise,sunset,sunshine_duration,uv_index_max,weather_code&hourly=precipitation_probability,precipitation,wind_speed_10m,wind_direction_10m,temperature_2m,apparent_temperature,relative_humidity_2m,surface_pressure,weather_code&current=temperature_2m,weather_code`
 
     try{
 
@@ -77,8 +106,6 @@ function App() {
       setWeatherData(data)
 
       console.log(data)
-
-      console.log(data.daily.sunshine_duration[extractData(selDate).startDayIndex])
         
     }catch(err){
 
@@ -95,7 +122,7 @@ function App() {
   return (
     <>    
       <Header fetchGeoData={fetchGeoData} geoData={geoData} weatherData={weatherData}></Header>
-      <Body geoData={geoData} weatherData={weatherData} days={days} weekDays={weekDays} selDate={selDate} setSelDate={setSelDate} extractData={extractData}></Body>
+      <Body geoData={geoData} weatherData={weatherData} days={days} weekDays={weekDays} selDate={selDate} setSelDate={setSelDate} extractData={extractData} getWeatherCode={getWeatherCode} nextDay={nextDay}></Body>
       <Footer></Footer>
     </>
   )

@@ -48,12 +48,13 @@ export default function SectionWrapper(props) {
             </div>
         </div>
 
-        <h2 className='text-xl md:text-2xl mt-4'>Wie wird das Wetter heute in {geoData?.city}?</h2>
+        <h2 className='text-xl md:text-2xl mt-4'>Wie wird das Wetter in {geoData?.city}?</h2>
         
         <div className='w-full p-0'>
             <table className='w-full text-center'>
                 <tr className='flex flex-start border border-b-0 border-t-0 border-r-0'>
-                    <p className='pl-4 py-4 text-xl'>{weekDays[selDate.day()]} {selDate.format('DD.MM.')}</p>
+                    <p className='pl-4 py-2 text-xl'>{weekDays[selDate.day()]},</p>
+                    <p className='pl-1 py-2 text-xl'>{selDate.format('DD.MM.')}</p>
                 </tr>
                 <tr>
                     <th className='border border-t-0 border-b-0 text-xl'>
@@ -371,8 +372,8 @@ export default function SectionWrapper(props) {
             </table>
         </div>
     
-        <div className='flex justify-between gap-2 w-full p-4'>
-            <div className='flex justify-between w-3/4 bg-slate-200 py-2 px-4 rounded-2xl'>
+        <div className='flex-col md:flex md:gap-2 md:justify-between w-full p-4'>
+            <div className='flex justify-between w-full md:w-3/4 bg-slate-200 py-2 px-4 rounded-2xl'>
                 <span className='flex gap-1'>
                     <i className="fa-solid fa-arrow-up"></i>
                     <p>{weatherData && weatherData.daily && weatherData.daily.sunrise && extractData(selDate) ? (
@@ -398,7 +399,7 @@ export default function SectionWrapper(props) {
                     )}</p>
                 </span>
             </div>
-            <div className={`flex justify-center w-1/4 py-2 px-4 rounded-2xl ${
+            <div className={`flex justify-center w-full md:w-1/4 py-2 mt-2 px-4 rounded-2xl ${
                 weatherData && weatherData.daily && weatherData.daily.uv_index_max && extractData(selDate) ? (
                     weatherData.daily.uv_index_max[extractData(selDate).startDayIndex] > 7 ? 'bg-red-200' :
                     weatherData.daily.uv_index_max[extractData(selDate).startDayIndex] > 5 ? 'bg-orange-200' :
@@ -423,32 +424,61 @@ export default function SectionWrapper(props) {
 
                 if( (hour.startsWith(selDate.format('YYYY-MM-DD'))) && (index >= currentTime) ){
 
-                    return(
-                        <div key={index} className='grid grid-cols-5 gap-4 border p-4 w-full'>
-                            <div>
-                                <p className='text-xl'>{hour.slice(11,16)} - {((parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString().length == 1 ? '0' + (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString() : (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString()) + ':00'} Uhr</p>
-                                <p>{weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.description}</p>
-                            </div>
-                            <div className='flex items-center justify-right gap-4'>
-                                <div className='bg-light-blue01 rounded-full'>
-                                    <img className='w-16' src={weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.image}></img>
+                    return<>
+                        <div className='hidden md:block'>
+                            <div key={index} className='grid grid-cols-5 gap-4 border p-4 w-full'>
+                                <div>
+                                    <p className='text-md md:text-xl'>{hour.slice(11,16)} - {((parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString().length == 1 ? '0' + (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString() : (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString()) + ':00'} Uhr</p>
+                                    <p>{weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.description}</p>
                                 </div>
-                                <p className='text-2xl'>{weatherData?.hourly.temperature_2m[index]}°</p>
-                            </div>
-                            <div className='flex items-center justify-right gap-2'>
-                                <i className="fa-solid fa-umbrella fa-xl"></i>
-                                <p>{weatherData?.hourly.precipitation_probability[index]}%</p>
-                            </div>
-                            <div className='flex items-center justify-right gap-2'>
-                                <i className="fa-solid fa-droplet fa-xl"></i>
-                                <p>{weatherData?.hourly.precipitation[index]}l/m<sup>2</sup></p>
-                            </div>
-                            <div className='flex items-center justify-right gap-2'>
-                                <i className="fa-solid fa-wind fa-xl"></i> {directions[Math.round(weatherData?.hourly.wind_direction_10m[index] / 45) % 8]}
-                                <p>{weatherData?.hourly.wind_speed_10m[index]}km/h</p>
+                                <div className='flex items-center justify-right gap-4'>
+                                    <div className='bg-light-blue01 rounded-full'>
+                                        <img className='w-16' src={weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.image}></img>
+                                    </div>
+                                    <p className='text-2xl'>{weatherData?.hourly.temperature_2m[index]}°</p>
+                                </div>
+                                <div className='flex items-center justify-right gap-2'>
+                                    <i className="fa-solid fa-umbrella fa-xl"></i>
+                                    <p>{weatherData?.hourly.precipitation_probability[index]}%</p>
+                                </div>
+                                <div className='flex items-center justify-right gap-2'>
+                                    <i className="fa-solid fa-droplet fa-xl"></i>
+                                    <p>{weatherData?.hourly.precipitation[index]}l/m<sup>2</sup></p>
+                                </div>
+                                <div className='flex items-center justify-right gap-2'>
+                                    <i className="fa-solid fa-wind fa-xl"></i> {directions[Math.round(weatherData?.hourly.wind_direction_10m[index] / 45) % 8]}
+                                    <p>{weatherData?.hourly.wind_speed_10m[index]}km/h</p>
+                                </div>
                             </div>
                         </div>
-                    )
+                    
+                        <div key={index} className='border md:hidden'>
+                            <div className='flex gap-4 p-2'>
+                                <p className='text-md font-bold'>{hour.slice(11,16)} - {((parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString().length == 1 ? '0' + (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString() : (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString()) + ':00'} Uhr</p>
+                                <p className='text-md'>{weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.description}</p>
+                            </div>
+                            <div className='w-full flex justify-between items-center p-2'>
+                                <div className='bg-light-blue01 rounded-full'>
+                                    <img className='w-8' src={weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.image}></img>
+                                </div>
+                                <div>
+                                    <p className='text-xl'>{weatherData?.hourly.temperature_2m[index]}°</p>
+                                </div>
+                                <div className='flex flex-col justify-between items-center'>
+                                    <i className="fa-solid fa-umbrella fa-md"></i>
+                                    <p>{weatherData?.hourly.precipitation_probability[index]}%</p>
+                                </div>
+                                <div className='flex flex-col justify-between items-center'>
+                                    <p><i className="fa-solid fa-droplet fa-md"></i></p>
+                                    <p>{weatherData?.hourly.precipitation[index]}l/m<sup>2</sup></p>
+                                </div>
+                                <div className='flex flex-col justify-between items-center'>
+                                    <span><i className="fa-solid fa-wind fa-md"></i> {directions[Math.round(weatherData?.hourly.wind_direction_10m[index] / 45) % 8]}</span>
+                                    <p>{weatherData?.hourly.wind_speed_10m[index]}km/h</p>
+                                </div>
+                            </div>
+                        </div>
+                    </>
                 }
             })}
 

@@ -9,7 +9,8 @@ export default {
       colors: {
         'dark-blue01': '#2F5CAB',
         'light-blue01': '#4379C8',
-        'light-blue02': '#E2EDF9'
+        'light-blue02': '#E2EDF9',
+        'light-blue03': '#B6C8E9',
       }
     },
   },

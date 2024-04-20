@@ -11,17 +11,19 @@ export default function SectionWrapper(props) {
 
   return (
     <>
-    <div className='flex gap-2 w-1/2 mt-4'>
+    <div className='flex gap-2 overflow-x-scroll w-full sm:w-10/12 md:w-10/12 lg:w-3/4 xl:w-1/2 mt-4'>
         {days?.map((day, index) => {
             return (
                 <button onClick={() =>{
                     setSelDate(day)
-                }} key={index} className={'flex flex-col w-1/6 p-2 rounded-t-lg ' + (selDate.isSame(day, 'day') ? 'bg-white text-dark-blue01' : 'bg-gradient-to-b from-light-blue01 via-dark-blue01 to-light-blue01 text-white hover:text-dark-blue01')}>
+                }} key={index} className={'flex flex-col w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2 rounded-t-lg min-w-24 ' + (selDate.isSame(day, 'day') ? 'bg-white text-dark-blue01' : 'bg-gradient-to-b from-light-blue01 via-dark-blue01 to-light-blue01 text-white hover:text-dark-blue01')}>
                     <div className='flex flex-col items-start w-full'>
                         <p className='font-medium text-lg'>{weekDays[day.day()]} {day.format('DD.MM.')}</p>
                         <div className='flex justify-between px-4 w-full'>
-                            <img className='w-16' src={weatherData?.daily && WEATHERDESCR[weatherData?.daily.weather_code[index]]?.day?.image || 'Loading...'}></img>
-                            <div className='flex flex-col'>
+                            <div className='w-1/2 hidden xl:inline-flex'>
+                                <img src={weatherData?.daily && WEATHERDESCR[weatherData?.daily.weather_code[index]]?.day?.image || 'Loading...'}></img>
+                            </div>
+                            <div className='w-1/2 flex flex-col hidden xl:inline-flex'>
                                 <p>{weatherData?.daily.temperature_2m_max[index]}°/{weatherData?.daily.temperature_2m_min[index]}°</p>
                                 <div><i className="fa-solid fa-umbrella"></i> {weatherData?.daily.precipitation_probability_mean[index]}%</div>
                             </div>
@@ -31,7 +33,7 @@ export default function SectionWrapper(props) {
             )
         })}
     </div>
-    <div className='flex flex-col bg-white text-blue-900 w-1/2 p-8'>
+    <div className='flex flex-col bg-white text-blue-900 w-full sm:w-10/12 md:w-10/12 lg:w-3/4 xl:w-1/2 p-8'>
         <div className='flex justify-between w-full bg-light-blue01 text-white p-4'>
             <div>
                 <p>Aktuelles Wetter in</p>
@@ -45,9 +47,10 @@ export default function SectionWrapper(props) {
                 </div>
             </div>
         </div>
-        <h2 className='text-2xl mt-4'>Wie wird das Wetter heute in {geoData?.city}?</h2>
+
+        <h2 className='text-xl md:text-2xl mt-4'>Wie wird das Wetter heute in {geoData?.city}?</h2>
         
-        <div>
+        <div className='w-full p-0'>
             <table className='w-full text-center'>
                 <tr className='flex flex-start border border-b-0 border-t-0 border-r-0'>
                     <p className='pl-4 py-4 text-xl'>{weekDays[selDate.day()]} {selDate.format('DD.MM.')}</p>
@@ -80,25 +83,37 @@ export default function SectionWrapper(props) {
                         22 - 06 Uhr
                     </td>
                 </tr>
+
                 <tr>
                     <td className='border border-t-0 border-b-0 p-4'>
-                        <div className='flex justify-center'>
-                            <img src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(6,13,false)]?.day?.image}></img>
+                        <div className='flex justify-center items-center'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                                <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(6,13,false)]?.day?.image}></img>
+                            </div>
                         </div>
                     </td>
+
                     <td className='border border-t-0 border-b-0 p-4'>
-                        <div className='flex justify-center'>
-                            <img src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(12,19,false)]?.day?.image}></img>
+                        <div className='flex justify-center items-center'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                                <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(12,19,false)]?.day?.image}></img>
+                            </div>
                         </div>
                     </td>
+
                     <td className='border border-t-0 border-b-0 p-4'>
-                        <div className='flex justify-center'>
-                            <img src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(18,23,false)]?.day?.image}></img>
+                        <div className='flex justify-center items-center'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                                <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(18,23,false)]?.day?.image}></img>
+                            </div>
                         </div>
                     </td>
+
                     <td className='border border-t-0 border-b-0 p-4'>
-                        <div className='flex justify-center'>
-                            <img src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(22,31,true)]?.night?.image}></img>
+                        <div className='flex justify-center items-center'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                                <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(22,31,true)]?.night?.image}></img>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -356,8 +371,6 @@ export default function SectionWrapper(props) {
             </table>
         </div>
     
-    
-
         <div className='flex justify-between gap-2 w-full p-4'>
             <div className='flex justify-between w-3/4 bg-slate-200 py-2 px-4 rounded-2xl'>
                 <span className='flex gap-1'>
@@ -416,8 +429,10 @@ export default function SectionWrapper(props) {
                                 <p className='text-xl'>{hour.slice(11,16)} - {((parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString().length == 1 ? '0' + (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString() : (parseInt(hour.slice(11,13))+1 == 24 ? 0 : parseInt(hour.slice(11,13))+1).toString()) + ':00'} Uhr</p>
                                 <p>{weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.description}</p>
                             </div>
-                            <div className='flex items-center justify-right gap-2'>
-                                <img className='w-16' src={weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.image}></img>
+                            <div className='flex items-center justify-right gap-4'>
+                                <div className='bg-light-blue01 rounded-full'>
+                                    <img className='w-16' src={weatherData?.hourly && WEATHERDESCR[weatherData?.hourly.weather_code[index]]?.day?.image}></img>
+                                </div>
                                 <p className='text-2xl'>{weatherData?.hourly.temperature_2m[index]}°</p>
                             </div>
                             <div className='flex items-center justify-right gap-2'>

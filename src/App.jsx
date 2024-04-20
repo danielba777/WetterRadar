@@ -82,8 +82,15 @@ function App() {
 
       const res = await fetch(url)
       const data = await res.json()
+
+      if(!data?.results[0]){
+        alert("Leider liegen uns für Ihre Eingabe keine Suchergebnisse vor.")
+        return
+      }
       
       setGeoData(data.results[0])
+
+      console.log(data)
     
     }catch(err){
 
@@ -104,8 +111,6 @@ function App() {
       const data = await res.json()
 
       setWeatherData(data)
-
-      console.log(data)
         
     }catch(err){
 

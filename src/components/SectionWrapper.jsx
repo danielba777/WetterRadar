@@ -88,7 +88,7 @@ export default function SectionWrapper(props) {
                 <tr>
                     <td className='border border-t-0 border-b-0 p-4'>
                         <div className='flex justify-center items-center'>
-                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full max-[640px]:w-14 max-[640px]:h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22'>
                                 <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(6,13,false)]?.day?.image}></img>
                             </div>
                         </div>
@@ -96,7 +96,7 @@ export default function SectionWrapper(props) {
 
                     <td className='border border-t-0 border-b-0 p-4'>
                         <div className='flex justify-center items-center'>
-                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full max-[640px]:w-14 max-[640px]:h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22'>
                                 <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(12,19,false)]?.day?.image}></img>
                             </div>
                         </div>
@@ -104,7 +104,7 @@ export default function SectionWrapper(props) {
 
                     <td className='border border-t-0 border-b-0 p-4'>
                         <div className='flex justify-center items-center'>
-                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full max-[640px]:w-14 max-[640px]:h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22'>
                                 <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(18,23,false)]?.day?.image}></img>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ export default function SectionWrapper(props) {
 
                     <td className='border border-t-0 border-b-0 p-4'>
                         <div className='flex justify-center items-center'>
-                            <div className='flex justify-center bg-light-blue01 rounded-full w-26 h-26'>
+                            <div className='flex justify-center bg-light-blue01 rounded-full max-[640px]:w-14 max-[640px]:h-14 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22'>
                                 <img className='object-cover rounded-full' src={weatherData?.hourly && WEATHERDESCR[getWeatherCode(22,31,true)]?.night?.image}></img>
                             </div>
                         </div>
@@ -372,7 +372,7 @@ export default function SectionWrapper(props) {
             </table>
         </div>
     
-        <div className='flex-col md:flex md:gap-2 md:justify-between w-full p-4'>
+        <div className='max-[640px]:flex-col md:flex md:gap-2 md:justify-between w-full p-4'>
             <div className='flex justify-between w-full md:w-3/4 bg-slate-200 py-2 px-4 rounded-2xl'>
                 <span className='flex gap-1'>
                     <i className="fa-solid fa-arrow-up"></i>
@@ -399,7 +399,7 @@ export default function SectionWrapper(props) {
                     )}</p>
                 </span>
             </div>
-            <div className={`flex justify-center w-full md:w-1/4 py-2 mt-2 px-4 rounded-2xl ${
+            <div className={`flex justify-center w-full md:w-1/4 py-2 max-[640px]:mt-2 px-4 rounded-2xl ${
                 weatherData && weatherData.daily && weatherData.daily.uv_index_max && extractData(selDate) ? (
                     weatherData.daily.uv_index_max[extractData(selDate).startDayIndex] > 7 ? 'bg-red-200' :
                     weatherData.daily.uv_index_max[extractData(selDate).startDayIndex] > 5 ? 'bg-orange-200' :

@@ -11,7 +11,7 @@ export default function SectionWrapper(props) {
 
   return (
     <>
-    <div className='flex gap-2 overflow-x-scroll w-full sm:w-10/12 md:w-10/12 lg:w-3/4 xl:w-1/2 mt-4'>
+    <div className='flex gap-2 overflow-x-scroll w-full sm:w-10/12 md:w-10/12 lg:w-3/4 2xl:w-7/12 mt-4'>
         {days?.map((day, index) => {
             return (
                 <button onClick={() =>{
@@ -33,11 +33,25 @@ export default function SectionWrapper(props) {
             )
         })}
     </div>
-    <div className='flex flex-col bg-white text-blue-900 w-full sm:w-10/12 md:w-10/12 lg:w-3/4 xl:w-1/2 p-8'>
-        <div className='flex justify-between w-full bg-light-blue01 text-white p-4'>
+    <div className='flex flex-col bg-white text-blue-900 w-full sm:w-10/12 md:w-10/12 lg:w-3/4 2xl:w-7/12 max-[640px]:p-2 sm:p-8'>
+
+        <div className='flex justify-between w-full bg-light-blue01 text-white p-4 max-[640px]:hidden'>
             <div>
                 <p>Aktuelles Wetter in</p>
                 <p className='text-2xl'>{geoData?.city}</p>
+            </div>
+            <div className='flex items-center'>
+                <img className='w-20' src={weatherData?.current && WEATHERDESCR[weatherData.current.weather_code]?.day?.image || 'Loading...'}></img>       
+                <div>
+                    <p className='text-2xl'>{weatherData?.current.temperature_2m}°</p>
+                    <p>{weatherData?.current && WEATHERDESCR[weatherData.current.weather_code]?.day?.description || 'Loading...'}</p>
+                </div>
+            </div>
+        </div>
+
+        <div className='flex flex-col w-full bg-light-blue01 text-white p-4 sm:hidden'>
+            <div className='flex'>
+                <p className='text-lg'>Aktuelles Wetter in <span className='font-bold'>{geoData?.city}</span></p>
             </div>
             <div className='flex items-center'>
                 <img className='w-20' src={weatherData?.current && WEATHERDESCR[weatherData.current.weather_code]?.day?.image || 'Loading...'}></img>       
